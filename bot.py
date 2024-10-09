@@ -19,3 +19,32 @@ def handle_message(update, context):
             model="meta/llama-3.1-405b-instruct",
             messages=[{"role": "user", "content": update.message.text}],
             temperature=0.2,
+            top_p=0.7,
+            max_tokens=1024,
+            stream=True
+        )
+
+        result = ""
+        for chunk in response:
+            result += chunk.choices[0].delta.content or ""
+
+        context.bot.send_message(chat_id=update.effective_chat.id, text=result)
+    except Exception as e:
+        print(f"Error: {e}")
+        context.bot.send_message(chat_id=update.effective_chat.id, text="Oops, something went wrong. Please try again later.")
+
+def main():
+    updater = Updater(token=BOT_TOKEN, use_context=True)
+    dispatcher = updater.dispatcher
+
+    start_handler = CommandHandler('start', start)
+    message_handler = MessageHandler(Filters.text & ~Filters.command, handle_message)
+
+    dispatcher.add_handler(start_handler)
+    dispatcher.add_handler(message_handler)
+
+    updater.start_polling()
+    updater.idle()
+
+if __name__ == '__main__':
+    main()
