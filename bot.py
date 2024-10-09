@@ -1,4 +1,4 @@
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from telegram.ext import Updater, CommandHandler, MessageHandler, filters
 from openai import OpenAI
 
 # Telegram bot token
@@ -38,7 +38,7 @@ def main():
     dispatcher = updater.dispatcher
 
     start_handler = CommandHandler('start', start)
-    message_handler = MessageHandler(Filters.text & ~Filters.command, handle_message)
+    message_handler = MessageHandler(filters.text & ~filters.command, handle_message)
 
     dispatcher.add_handler(start_handler)
     dispatcher.add_handler(message_handler)
