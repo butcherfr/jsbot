@@ -37,7 +37,7 @@ def main():
     application = ApplicationBuilder().token(BOT_TOKEN).build()
 
     start_handler = CommandHandler('start', start)
-    message_handler = MessageHandler(filters.text & ~filters.command, handle_message)
+    message_handler = MessageHandler(filters.Text() & ~filters.command, handle_message)
 
     application.add_handler(start_handler)
     application.add_handler(message_handler)
